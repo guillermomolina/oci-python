@@ -23,9 +23,9 @@ class ImageConfig(Struct):
         entrypoint=None,
         cmd=None,
         volumes=None,
-        workingDir=None,
+        working_dir=None,
         labels=None,
-        stopSignal=None,
+        stop_signal=None,
     ):
 
         super().__init__()
@@ -65,9 +65,9 @@ class ImageConfig(Struct):
         self.add("Entrypoint", entrypoint)
         self.add("Cmd", cmd)
         self.add("Volumes", volumes)
-        self.add("WorkingDir", workingDir)
+        self.add("WorkingDir", working_dir)
         self.add("Labels", labels)
-        self.add("StopSignal", stopSignal)
+        self.add("StopSignal", stop_signal)
 
 
 class RootFS(Struct):
@@ -129,11 +129,11 @@ class Image(Struct):
         self,
         created=None,
         author=None,
-        arch=None,
-        imageOS=None,
-        imageConfig=None,
+        architecture=None,
+        os=None,
+        config=None,
         rootfs=None,
-        hist=None,
+        history=None,
     ):
 
         super().__init__()
@@ -163,8 +163,8 @@ class Image(Struct):
 
         self.add("Created", created)
         self.add("Author", author)
-        self.add("Architecture", arch)
-        self.add("OS", imageOS)
-        self.add("Config", imageConfig)
+        self.add("Architecture", architecture)
+        self.add("OS", os)
+        self.add("Config", config)
         self.add("RootFS", rootfs)
-        self.add("History", hist)
+        self.add("History", history)

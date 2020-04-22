@@ -18,6 +18,7 @@ from .mediatype import (
     MediaTypeImageLayerNonDistributableZstd,
 )
 
+ManifestSchemaVersion = 2
 
 class Manifest(Struct):
     """Manifest provides `application/vnd.oci.image.manifest.v1+json`
@@ -25,7 +26,7 @@ class Manifest(Struct):
     """
 
     def __init__(
-        self, manifestConfig=None, layers=None, schemaVersion=None, annotations=None
+        self, config=None, layers=None, schema_version=None, annotations=None
     ):
         super().__init__()
 
@@ -45,10 +46,10 @@ class Manifest(Struct):
         # Annotations contains arbitrary metadata for the image manifest.
         self.newAttr(name="Annotations", attType=dict, jsonName="annotations")
 
-        self.add("Config", manifestConfig)
+        self.add("Config", config)
         self.add("Layers", layers)
         self.add("Annotations", annotations)
-        self.add("schemaVersion", schemaVersion)
+        self.add("schemaVersion", schema_version or ManifestSchemaVersion)
 
     def _validate(self):
         """custom validation function to ensure that Config and Layers mediaTypes
@@ -62,20 +63,20 @@ class Manifest(Struct):
     def _validateConfigMediaType(self):
         """validate the config media type."""
         # The media type of the config must be for the config
-        manifestConfig = self.attrs.get("Config").value
+        config = self.attrs.get("Config").value
 
         # Missing config is not valid
-        if not manifestConfig:
+        if not config:
             return False
 
-        mediaType = manifestConfig.attrs.get("MediaType").value
-        if not mediaType:
+        media_type = config.attrs.get("MediaType").value
+        if not media_type:
             return False
 
-        if mediaType != MediaTypeImageConfig:
+        if media_type != MediaTypeImageConfig:
             bot.error(
-                "config mediaType %s is invalid, should be %s"
-                % (mediaType, MediaTypeImageConfig)
+                "config media_type %s is invalid, should be %s"
+                % (media_type, MediaTypeImageConfig)
             )
             return False
         return True
@@ -83,7 +84,7 @@ class Manifest(Struct):
     def _validateLayerMediaTypes(self):
         """validate the Layer Media Types"""
         # These are valid mediaTypes for layers
-        layerMediaTypes = [
+        valid_types = [
             MediaTypeImageLayer,
             MediaTypeImageLayerGzip,
             MediaTypeImageLayerZstd,
@@ -99,9 +100,9 @@ class Manifest(Struct):
 
         # Check against valid mediaType Layers
         for layer in layers:
-            mediaType = layer.attrs.get("MediaType").value
-            if mediaType not in layerMediaTypes:
-                bot.error("layer mediaType %s is invalid" % mediaType)
+            media_type = layer.attrs.get("MediaType").value
+            if media_type not in valid_types:
+                bot.error("layer media_type %s is invalid" % media_type)
                 return False
 
         return True

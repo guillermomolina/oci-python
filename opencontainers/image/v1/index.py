@@ -12,13 +12,15 @@ from .descriptor import Descriptor
 import re
 
 
+IndexSchemaVersion = 2
+
 class Index(Struct):
     """Index references manifests for various platforms.
     This structure provides `application/vnd.oci.image.index.v1+json`
     mediatype when marshalled to JSON.
     """
 
-    def __init__(self, manifests=None, schemaVersion=None, annotations=None):
+    def __init__(self, manifests=None, schema_version=None, annotations=None):
         super().__init__()
 
         self.newAttr(name="schemaVersion", attType=Versioned, required=True)
@@ -33,7 +35,7 @@ class Index(Struct):
 
         self.add("Manifests", manifests)
         self.add("Annotations", annotations)
-        self.add("schemaVersion", schemaVersion)
+        self.add("schemaVersion", schema_version or IndexSchemaVersion)
 
     def _validate(self):
         """custom validation function to ensure that Manifests mediaTypes
@@ -44,18 +46,18 @@ class Index(Struct):
         manifests = self.attrs.get("Manifests").value
         if manifests:
             for manifest in manifests:
-                mediaType = manifest.attrs.get("MediaType")
-                if mediaType.value not in valid_types:
+                media_type = manifest.attrs.get("MediaType")
+                if media_type.value not in valid_types:
 
                     # Case 1: it's a custom media type (allowed) but give warning
-                    if mediaType.validate_regexp(mediaType.value):
+                    if media_type.validate_regexp(media_type.value):
                         bot.warning(
-                            "%s is valid, but not registered." % mediaType.value
+                            "%s is valid, but not registered." % media_type.value
                         )
 
                     # Case 2: not valid and doesn't match regular expression
                     else:
-                        bot.error("%s is not valid for index manifest." % mediaType)
+                        bot.error("%s is not valid for index manifest." % media_type)
                         return False
 
         return True

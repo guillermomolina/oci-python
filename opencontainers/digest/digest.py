@@ -128,7 +128,10 @@ def FromBytes(p):
 
 
 def FromString(p):
-    """FromString digests the input and returns a Digest."""
+    """FromString digests the input and returns a Digest.
+    """
+    from .algorithm import Canonical
+    
     return Canonical.fromString(p)
 
 

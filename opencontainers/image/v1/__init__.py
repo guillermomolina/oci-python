@@ -19,7 +19,7 @@ from .annotations import (
     AnnotationDescription,
 )
 
-from .config import ImageConfig, RootFS, Image
+from .config import ImageConfig, RootFS, Image, History
 
 from .descriptor import Descriptor, Platform
 

@@ -9,6 +9,7 @@ from datetime import datetime
 import copy
 import json
 import re
+from dateutil import parser
 
 
 class StructAttr(object):
@@ -70,7 +71,8 @@ class StructAttr(object):
     def set(self, value):
         """set a new value, and validate the type. Return true if set"""
         # First pass, it might be another object to add
-        if self._is_struct():
+        # Convert it if it is not the correct type
+        if self._is_struct() and not isinstance(value, self.attType):
             newStruct = self.attType()
             value = newStruct.load(value)
 
@@ -85,8 +87,11 @@ class StructAttr(object):
                 if isinstance(value, list):
                     values = []
                     for v in value:
-                        newStruct = child()
-                        values.append(newStruct.load(v))
+                        # Convert it if it is not the correct type
+                        if not isinstance(v, child):
+                            newStruct = child()
+                            v = newStruct.load(v)
+                        values.append(v)
                     value = values
                 else:
                     newStruct = child()
@@ -96,12 +101,18 @@ class StructAttr(object):
         if not self.validate_regexp(value):
             return False
 
+        if self.attType == datetime and isinstance(value, str):
+            try:
+                value = parser.isoparse(value)
+            except:
+                return False
+
         if self.validate_type(value):
             self.value = value
             return True
         return False
 
-    def to_dict(self):
+    def to_dict(self, use_real_name=False):
         """return a dictionary representation of the attribute. This won't
         be called unless the attribute in question is a struct.
         """
@@ -114,12 +125,12 @@ class StructAttr(object):
                 if isinstance(item, (str, int)):
                     items.append(item)
                 elif isinstance(item, (Struct, StrStruct, IntStruct)):
-                    items.append(item.to_dict())
+                    items.append(item.to_dict(use_real_name))
                 else:
                     items.append(item)
             return items
 
-        return self.value.to_dict()
+        return self.value.to_dict(use_real_name)
 
     def validate_datetime(self, value):
         """validate a datetime string, but be generous to only check day,
@@ -127,7 +138,7 @@ class StructAttr(object):
         """
         value = value.split("T")[0]
         try:  # "2015-10-31T22:22:56.015925234Z"
-            datetime.strptime(value, "%Y-%m-%d")
+            parser.isoparse(value)
             return True
         except ValueError:
             return False
@@ -169,7 +180,7 @@ class StructAttr(object):
                         return False
 
         # If it's a datetime, should be valid string
-        elif self.attType == datetime:
+        elif self.attType == datetime and isinstance(value, str):
             return self.validate_datetime(value)
 
         # Otherwise, validate as is
@@ -246,22 +257,50 @@ class Struct(object):
                     continue
                 if not att.value:
                     value = lookup.get(att.attType, [])
-                    result[att.jsonName] = value
                 else:
                     # If structure or list, call to_dict
                     if att._is_struct() or isinstance(att.value, list):
-                        result[att.jsonName] = att.to_dict()
+                        value = att.to_dict(use_real_name)
+                    elif isinstance(att.value, datetime):
+                        value = att.value.strftime('%Y-%m-%dT%H:%M:%S.%f000Z')
                     else:
-                        result[att.jsonName] = att.value
-
+                        value = att.value
+                name = att.jsonName
+                if use_real_name:
+                    name = att.name
+                result[name] = value
             return result
 
     def to_json(self):
         """get the dictionary of a struct and return pretty printed json"""
         result = self.to_dict()
         if result:
-            result = json.dumps(result, indent=4)
+            if compact:
+                result = json.dumps(result, separators=(',', ':'))
+            else: 
+                result = json.dumps(result, indent=4)
         return result
+    
+    def save(self, file_name):
+        result = self.to_json(compact=True)
+        if result:
+            with open(file_name, 'w') as f:
+                f.write(result)
+
+    def get(self, name):
+        """get a value from an existing attribute, normally when used by a client
+        """
+
+        if name not in self.attrs:
+            bot.exit("%s is not a valid attribute." % name)
+
+        attr = self.attrs[name]
+
+        # Don't show if unset and omit empty, OR marked to hide
+        if (not attr.value and attr.omitempty) or attr.hide:
+            return None
+
+        return attr.value
 
     def add(self, name, value):
         """add a value to an existing attribute, normally when used by a client"""
@@ -344,6 +383,13 @@ class Struct(object):
             if not self._validate():
                 return False
         return True
+    
+    def save_json(self, file_name, compact=True):
+        result = self.to_json(compact)
+        if result is not None:
+            with open(file_name, 'w') as f:
+                f.write(result)
+
 
 
 class StrStruct(Struct, str):
@@ -373,7 +419,7 @@ class IntStruct(Struct, int):
         super().__init__(**kwargs)
 
     def load(self, content, validate=True):
-        # If we have an int, self must also have string subclass
+        # If we have an int, self must also have int subclass
         if isinstance(self, int) and isinstance(content, int):
             self = self.__class__(content)
             self.validate()

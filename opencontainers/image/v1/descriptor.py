@@ -18,7 +18,7 @@ class Descriptor(Struct):
         self,
         digest=None,
         size=None,
-        mediatype=None,
+        media_type=None,
         urls=None,
         annotations=None,
         platform=None,
@@ -54,7 +54,7 @@ class Descriptor(Struct):
 
         self.add("Digest", digest)
         self.add("Size", size)
-        self.add("MediaType", mediatype)
+        self.add("MediaType", media_type)
         self.add("URLs", urls)
         self.add("Annotations", annotations)
         self.add("Platform", platform)

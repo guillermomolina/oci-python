@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2020 Vanessa Sochat.
+# Copyright (C) 2020 Guillermo Adrián Molina.
 
 # This Source Code Form is subject to the terms of the
 # Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed
@@ -13,19 +13,10 @@ VersionMajor = 1
 VersionMinor = 0
 
 # VersionPatch is for backwards-compatible bug fixes
-VersionPatch = 1
+VersionPatch = 2
 
 # VersionDev indicates development branch. Releases will be empty string.
 VersionDev = "-dev"
 
 # Version is the specification version that the package types support.
 Version = "%d.%d.%d%s" % (VersionMajor, VersionMinor, VersionPatch, VersionDev)
-
-# Versioned provides a struct with the manifest schemaVersion and mediaType.
-# Incoming content with unknown schema version can be decoded against this
-# struct to check the version.
-
-
-class Versioned(IntStruct):
-    def __init__(self, schema_version=None):
-        super().__init__(schema_version or VersionMajor)
