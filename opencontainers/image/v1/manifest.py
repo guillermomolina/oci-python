@@ -10,12 +10,19 @@ from opencontainers.logger import bot
 from .descriptor import Descriptor
 from .mediatype import (
     MediaTypeImageConfig,
+    # layer image type tar
     MediaTypeImageLayer,
     MediaTypeImageLayerGzip,
     MediaTypeImageLayerZstd,
     MediaTypeImageLayerNonDistributable,
     MediaTypeImageLayerNonDistributableGzip,
     MediaTypeImageLayerNonDistributableZstd,
+    # layer image type zfs
+    MediaTypeImageLayerZfs,
+    MediaTypeImageLayerZfsXZ,
+    MediaTypeImageLayerNonDistributableZfs,
+    MediaTypeImageLayerNonDistributableZfsXZ,
+    MediaTypeImageConfig,
 )
 
 ManifestSchemaVersion = 2
@@ -85,12 +92,19 @@ class Manifest(Struct):
         """validate the Layer Media Types"""
         # These are valid mediaTypes for layers
         valid_types = [
+            # layer image type tar
             MediaTypeImageLayer,
             MediaTypeImageLayerGzip,
             MediaTypeImageLayerZstd,
             MediaTypeImageLayerNonDistributable,
             MediaTypeImageLayerNonDistributableGzip,
             MediaTypeImageLayerNonDistributableZstd,
+            # layer image type zfs
+            MediaTypeImageLayerZfs,
+            MediaTypeImageLayerZfsXZ,
+            MediaTypeImageLayerNonDistributableZfs,
+            MediaTypeImageLayerNonDistributableZfsXZ,
+            MediaTypeImageConfig,
         ]
 
         # No layers, not valid

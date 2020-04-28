@@ -197,6 +197,18 @@ class Struct(object):
     here to add required attributes.
     """
 
+    @classmethod
+    def from_json(cls, data_json):
+        obj = cls()
+        obj.load(data_json)
+        return obj
+
+    @classmethod
+    def from_file(cls, file_name):
+        with open(file_name, 'r') as file_pointer:
+            file_json = json.load(file_pointer)
+            return cls.from_json(file_json)
+
     def __init__(self):
         self.attrs = {}
 
@@ -255,7 +267,7 @@ class Struct(object):
                 # Don't show if unset and omit empty, OR marked to hide
                 if (not att.value and att.omitempty) or att.hide:
                     continue
-                if not att.value:
+                if att.value is None:
                     value = lookup.get(att.attType, [])
                 else:
                     # If structure or list, call to_dict
@@ -368,8 +380,13 @@ class Struct(object):
             if not att.required and not att.value:
                 continue
 
-            # A required attribute cannot be None or empty
-            if att.required and not att.value:
+            # A required attribute cannot be None
+            if att.required and att.value is None:
+                bot.error("%s is required." % name)
+                return False
+
+            # A required attribute cannot be empty unless omitempty is False
+            if att.required and not att.value and att.omitempty:
                 bot.error("%s is required." % name)
                 return False
 

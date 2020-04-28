@@ -15,6 +15,7 @@ class RepositoryList(Struct):
     def __init__(self, repositories=None):
         super().__init__()
         self.newAttr(
-            name="Repositories", attType=[str], jsonName="repositories", required=True
+            name="Repositories", attType=[str], jsonName="repositories", 
+            required=True, omitempty=False
         )
         self.add("Repositories", repositories or [])

@@ -33,11 +33,17 @@ from .mediatype import (
     MediaTypeLayoutHeader,
     MediaTypeImageManifest,
     MediaTypeImageIndex,
+    # layer image type tar
     MediaTypeImageLayer,
     MediaTypeImageLayerGzip,
     MediaTypeImageLayerZstd,
     MediaTypeImageLayerNonDistributable,
     MediaTypeImageLayerNonDistributableGzip,
     MediaTypeImageLayerNonDistributableZstd,
+    # layer image type zfs
+    MediaTypeImageLayerZfs,
+    MediaTypeImageLayerZfsXZ,
+    MediaTypeImageLayerNonDistributableZfs,
+    MediaTypeImageLayerNonDistributableZfsXZ,
     MediaTypeImageConfig,
 )

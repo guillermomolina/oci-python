@@ -13,9 +13,10 @@ class TagList(Struct):
     """TagList is a list of tags for a given repository.
     """
 
-    def __init__(self, name, tags=None):
+    def __init__(self, name=None, tags=None):
         super().__init__()
         self.newAttr(name="Name", attType=str, jsonName="name", required=True)
-        self.newAttr(name="Tags", attType=[str], jsonName="tags", required=True)
+        self.newAttr(name="Tags", attType=[str], jsonName="tags", 
+            required=True, omitempty=False)
         self.add("Name", name)
         self.add("Tags", tags or [])
