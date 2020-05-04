@@ -204,10 +204,14 @@ class Struct(object):
         return obj
 
     @classmethod
+    def read(cls, file_pointer):
+        file_json = json.load(file_pointer)
+        return cls.from_json(file_json)
+
+    @classmethod
     def from_file(cls, file_name):
         with open(file_name, 'r') as file_pointer:
-            file_json = json.load(file_pointer)
-            return cls.from_json(file_json)
+            return cls.read(file_pointer)
 
     def __init__(self):
         self.attrs = {}
@@ -293,11 +297,14 @@ class Struct(object):
                 result = json.dumps(result, indent=4)
         return result
     
-    def save(self, file_name):
+    def write(self, file_ptr):
         result = self.to_json(compact=True)
         if result:
-            with open(file_name, 'w') as f:
-                f.write(result)
+            file_ptr.write(result)
+    
+    def save(self, file_name):
+        with open(file_name, 'w') as file_ptr:
+            self.write(file_ptr)
 
     def get(self, name):
         """get a value from an existing attribute, normally when used by a client
@@ -380,10 +387,10 @@ class Struct(object):
             if not att.required and not att.value:
                 continue
 
-            # A required attribute cannot be None
+            '''# A required attribute cannot be None
             if att.required and att.value is None:
                 bot.error("%s is required." % name)
-                return False
+                return False'''
 
             # A required attribute cannot be empty unless omitempty is False
             if att.required and not att.value and att.omitempty:
