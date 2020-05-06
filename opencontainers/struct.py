@@ -38,6 +38,7 @@ class StructAttr(object):
         omitempty=True,
         regexp=None,
         hide=False,
+        platform=None
     ):
         self.name = name
         self.value = value
@@ -47,6 +48,7 @@ class StructAttr(object):
         self.jsonName = jsonName or name
         self.omitempty = omitempty
         self.hide = hide
+        self.platform = platform or []
 
     def __str__(self):
         return "<opencontainers.struct.StructAttr-%s:%s>" % (self.name, self.value)
@@ -225,6 +227,7 @@ class Struct(object):
         omitempty=True,
         regexp="",
         hide=False,
+        platform=None
     ):
         """add a new attribute, including a name, json key to dump,
         type, and if required. We don't need a value here. You can
@@ -247,6 +250,7 @@ class Struct(object):
             omitempty=omitempty,
             regexp=regexp,
             hide=hide,
+            platform=platform
         )
 
     def _clear_values(self):
@@ -269,7 +273,7 @@ class Struct(object):
             for name, att in self.attrs.items():
 
                 # Don't show if unset and omit empty, OR marked to hide
-                if (not att.value and att.omitempty) or att.hide:
+                if (att.value is None and att.omitempty) or att.hide:
                     continue
                 if att.value is None:
                     value = lookup.get(att.attType, [])

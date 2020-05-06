@@ -9,23 +9,25 @@ from opencontainers.digest import Digest
 
 from datetime import datetime
 
+StateOCIVersion = "1.0.0"
+
 class State(Struct):
     # State holds information about the runtime state of the container.
 
     def __init__(
         self,
-        version=None,
+        ociVersion=None,
         id=None,
         status=None,
         pid=None,
-        bundle=None,
+        bundlepath=None,
         annotations=None
     ):
 
         super().__init__()
 
-        # Version is the version of the specification that is supported.
-        self.newAttr(name="Version", attType=str, required=True, jsonName="ociVersion")
+        # ociVersion is the version of the specification that is supported.
+        self.newAttr(name="ociVersion", attType=str, required=True, jsonName="ociVersion")
         
         # ID is the container ID
         self.newAttr(name="ID", attType=str, required=True, jsonName="id")
@@ -37,14 +39,14 @@ class State(Struct):
         self.newAttr(name="Pid", attType=int, jsonName="pid")
 
         # Bundle is the path to the container's bundle directory.
-        self.newAttr(name="Bundle", attType=str, required=True, jsonName="bundle")
+        self.newAttr(name="Bundle", attType=str, required=True, jsonName="bundlepath")
 
         # Annotations are key values associated with the container.
         self.newAttr(name="Annotations", attType=dict, jsonName="annotations")
 
-        self.add("Version", version)
+        self.add("ociVersion", ociVersion or StateOCIVersion)
         self.add("ID", id)
         self.add("Status", status)
         self.add("Pid", pid)
-        self.add("Bundle", bundle)
+        self.add("Bundle", bundlepath)
         self.add("Annotations", annotations)
