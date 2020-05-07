@@ -286,7 +286,14 @@ class SolarisAnet(Struct):
     # SolarisAnet provides the specification for automatic creation of network resources for this container.
           
     def __init__(
-        self
+        self,
+        linkname=None,
+        lowerLink=None,
+        allowedAddress=None,
+        configureAllowedAddress=None,
+        defrouter=None,
+        linkProtection=None,
+        macAddress=None
     ):
 
         super().__init__()
@@ -305,6 +312,15 @@ class SolarisAnet(Struct):
         self.newAttr(name="Linkprotection", attType=str, jsonName="linkProtection", omitempty=True)
         # Set the VNIC's macAddress
         self.newAttr(name="Macaddress", attType=str, jsonName="macAddress", omitempty=True)
+
+        self.add("Linkname", linkname)
+        self.add("Lowerlink", lowerLink)
+        self.add("Allowedaddr", allowedAddress)
+        self.add("Configallowedaddr", configureAllowedAddress)
+        self.add("Defrouter", defrouter)
+        self.add("Linkprotection", linkProtection)
+        self.add("Macaddress", macAddress)
+
 
 
 class SolarisCappedMemory(Struct):

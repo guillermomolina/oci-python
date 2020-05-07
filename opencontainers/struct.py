@@ -301,14 +301,14 @@ class Struct(object):
                 result = json.dumps(result, indent=4)
         return result
     
-    def write(self, file_ptr):
-        result = self.to_json(compact=True)
+    def write(self, file_ptr, compact=True):
+        result = self.to_json(compact)
         if result:
             file_ptr.write(result)
     
-    def save(self, file_name):
+    def save(self, file_name, compact=True):
         with open(file_name, 'w') as file_ptr:
-            self.write(file_ptr)
+            self.write(file_ptr, compact)
 
     def get(self, name):
         """get a value from an existing attribute, normally when used by a client
