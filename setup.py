@@ -15,7 +15,7 @@ import os
 def get_lookup():
     """get version by way of the version file"""
     lookup = dict()
-    version_file = os.path.join("opencontainers", "version.py")
+    version_file = os.path.join('oci_spec', 'version.py')
     with open(version_file) as filey:
         exec(filey.read(), lookup)
     return lookup
