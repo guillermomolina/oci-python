@@ -13,6 +13,6 @@ KEYWORDS = "open containers, oci"
 DESCRIPTION = "Python module for oci specifications"
 LICENSE = "LICENSE"
 
-INSTALL_REQUIRES = ()
+INSTALL_REQUIRES = (("python-dateutil", {"min_version": "2.5.0"}),)
 
 TESTS_REQUIRES = (("pytest", {"min_version": "4.6.2"}),)

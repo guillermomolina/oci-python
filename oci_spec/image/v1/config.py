@@ -4,10 +4,11 @@
 # Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed
 # with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+from datetime import datetime
+
+from oci_spec.logger import bot
 from oci_spec.struct import Struct
 from oci_spec.digest import Digest
-
-from datetime import datetime
 
 
 class ImageConfig(Struct):

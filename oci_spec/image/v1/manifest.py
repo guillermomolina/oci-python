@@ -17,12 +17,6 @@ from .mediatype import (
     MediaTypeImageLayerNonDistributable,
     MediaTypeImageLayerNonDistributableGzip,
     MediaTypeImageLayerNonDistributableZstd,
-    # layer image type zfs
-    MediaTypeImageLayerZfs,
-    MediaTypeImageLayerZfsXZ,
-    MediaTypeImageLayerNonDistributableZfs,
-    MediaTypeImageLayerNonDistributableZfsXZ,
-    MediaTypeImageConfig,
 )
 
 ManifestSchemaVersion = 2
@@ -99,12 +93,6 @@ class Manifest(Struct):
             MediaTypeImageLayerNonDistributable,
             MediaTypeImageLayerNonDistributableGzip,
             MediaTypeImageLayerNonDistributableZstd,
-            # layer image type zfs
-            MediaTypeImageLayerZfs,
-            MediaTypeImageLayerZfsXZ,
-            MediaTypeImageLayerNonDistributableZfs,
-            MediaTypeImageLayerNonDistributableZfsXZ,
-            MediaTypeImageConfig,
         ]
 
         # No layers, not valid

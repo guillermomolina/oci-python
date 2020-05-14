@@ -40,10 +40,5 @@ from .mediatype import (
     MediaTypeImageLayerNonDistributable,
     MediaTypeImageLayerNonDistributableGzip,
     MediaTypeImageLayerNonDistributableZstd,
-    # layer image type zfs
-    MediaTypeImageLayerZfs,
-    MediaTypeImageLayerZfsXZ,
-    MediaTypeImageLayerNonDistributableZfs,
-    MediaTypeImageLayerNonDistributableZfsXZ,
     MediaTypeImageConfig,
 )

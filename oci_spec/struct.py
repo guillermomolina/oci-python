@@ -6,10 +6,11 @@
 
 from oci_spec.logger import bot
 from datetime import datetime
+from decimal import Decimal
 import copy
 import json
 import re
-from dateutil import parser
+import dateutil
 
 
 class StructAttr(object):
@@ -105,7 +106,7 @@ class StructAttr(object):
 
         if self.attType == datetime and isinstance(value, str):
             try:
-                value = parser.isoparse(value)
+                value = dateutil.parser.isoparse(value)
             except:
                 return False
 
@@ -140,7 +141,7 @@ class StructAttr(object):
         """
         value = value.split("T")[0]
         try:  # "2015-10-31T22:22:56.015925234Z"
-            parser.isoparse(value)
+            dateutil.parser.isoparse(value)
             return True
         except ValueError:
             return False

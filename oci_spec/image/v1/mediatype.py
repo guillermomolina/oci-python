@@ -48,28 +48,5 @@ MediaTypeImageLayerNonDistributableZstd = (
     "application/vnd.oci.image.layer.nondistributable.v1.tar+zstd"
 )
 
-# MediaTypeImageLayer is the media type used for snapshots referenced 
-# by the manifest.
-MediaTypeImageLayerZfs = "application/vnd.oci.image.layer.v1.zfs"
-
-# MediaTypeImageLayerXZ is the media type used for xzipped snapshots
-# referenced by the manifest.
-MediaTypeImageLayerZfsXZ = (
-    "application/vnd.oci.image.layer.v1.zfs+xz"
-)
-
-# MediaTypeImageLayerNonDistributable is the media type for snapshots
-# referenced by the manifest but with distribution restrictions.
-MediaTypeImageLayerNonDistributableZfs = (
-    "application/vnd.oci.image.layer.nondistributable.v1.zfs"
-)
-
-# MediaTypeImageLayerNonDistributableXZ is the media type for
-# xzipped snapshots referenced by the manifest but with distribution
-# restrictions.
-MediaTypeImageLayerNonDistributableZfsXZ = (
-    "application/vnd.oci.image.layer.nondistributable.v1.zfs+xz"
-)
-
 # MediaTypeImageConfig specifies the media type for the image configuration.
 MediaTypeImageConfig = "application/vnd.oci.image.config.v1+json"
