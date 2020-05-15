@@ -22,12 +22,8 @@ import pytest
 
 
 def test_algorithms(tmp_path):
-<<<<<<< master:opencontainers/tests/test_algorithm.py
-    """test creation of an opencontainers Algorithm"""
-=======
     """test creation of an oci_spec Algorithm
     """
->>>>>>> Version 0.1.3:oci_spec/tests/test_algorithm.py
     # Generate random bytes
     asciitext = "".join([random.choice(string.ascii_letters) for n in range(20)])
     p = bytes(asciitext, "utf-8")
