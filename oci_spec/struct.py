@@ -261,8 +261,12 @@ class Struct(object):
         for name, att in self.attrs.items():
             self.attrs[name].value = None
 
-    def to_dict(self):
-        """return a Struct as a dictionary, must be valid"""
+    def copy(self):
+        return self.__class__.from_json(self.to_dict())
+
+    def to_dict(self, use_real_name=False):
+        """return a Struct as a dictionary, must be valid
+        """
         # A lookup of "empty" values based on types (mirrors Go)
         lookup = {str: "", int: None, list: [], dict: {}}
 
