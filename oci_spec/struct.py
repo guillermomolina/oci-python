@@ -338,7 +338,7 @@ class Struct(object):
         attr = self.attrs[name]
 
         # Don't validate the type if provided is empty
-        if value:
+        if value is not None:
             if not attr.set(value):
                 bot.exit("%s must be type %s." % (name, attr.attType))
 
